@@ -28,11 +28,20 @@ async function run() {
 
         // collections
         const categoryCollection = client.db('bookPalDB').collection('categories');
+        const bookCollection = client.db('bookPalDB').collection('books');
 
         // categories
         app.get('/categories', async (req, res) => {
             const cursor = categoryCollection.find();
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // books
+        app.post('/books', async (req, res) => {
+            const newBook = req.body;
+            console.log(newBook);
+            const result = await bookCollection.insertOne(newBook);
             res.send(result);
         })
 
