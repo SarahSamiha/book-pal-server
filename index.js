@@ -38,6 +38,12 @@ async function run() {
         })
 
         // books
+        app.get('/books', async (req, res) => {
+            const cursor = bookCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         app.post('/books', async (req, res) => {
             const newBook = req.body;
             console.log(newBook);
