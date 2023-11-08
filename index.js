@@ -29,6 +29,7 @@ async function run() {
         // collections
         const categoryCollection = client.db('bookPalDB').collection('categories');
         const bookCollection = client.db('bookPalDB').collection('books');
+        const borrowedBookCollection = client.db('bookPalDB').collection('borrowedBooks');
 
         // categories
         app.get('/categories', async (req, res) => {
@@ -63,10 +64,43 @@ async function run() {
 
         app.post('/books', async (req, res) => {
             const newBook = req.body;
-            console.log(newBook);
             const result = await bookCollection.insertOne(newBook);
             res.send(result);
         })
+
+        // app.patch('/books/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const filter = { _id: new ObjectId(id) };
+        //     const updatedBook = req.body;
+        //     console.log(updatedBook)
+        //     const updateDoc = {
+        //         $set: {
+        //             quantityAvailable: updatedBook.quantityAvailable,
+        //         }
+        //     }
+
+        //     const result = await bookCollection.updateOne(filter, updateDoc);
+        //     res.send(result);
+
+        // })
+
+        // borrowedBooks
+        app.get('/borrowedBooks', async (req, res) => {
+            let query = {};
+            if (req.query?.email) {
+                query = { email: req.query?.email }
+            }
+            const result = await borrowedBookCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        app.post('/borrowedBooks', async (req, res) => {
+            const newBorrowedBook = req.body;
+            const result = await borrowedBookCollection.insertOne(newBorrowedBook);
+            res.send(result);
+        })
+
+        
 
 
         // Send a ping to confirm a successful connection
