@@ -68,6 +68,27 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/books/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedBook = req.body;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+
+            const book = {
+                $set: {
+                    bookName: updatedBook.bookName,
+                    authorName: updatedBook.authorName,
+                    categoryName: updatedBook.categoryName,
+                    quantityAvailable: updatedBook.quantityAvailable,
+                    rating: updatedBook.rating,
+                    image: updatedBook.image,
+
+                }
+            }
+            const result = await bookCollection.updateOne(filter, book, options);
+            res.send(result);
+        })
+
         // app.patch('/books/:id', async (req, res) => {
         //     const id = req.params.id;
         //     const filter = { _id: new ObjectId(id) };
@@ -100,7 +121,7 @@ async function run() {
             res.send(result);
         })
 
-        
+
 
 
         // Send a ping to confirm a successful connection
